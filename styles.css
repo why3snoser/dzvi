@@ -1,63 +1,66 @@
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #FF9A9E, #FAD0C4);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #333;
-  text-align: center;
-}
+// Перевірка, чи сайт запущений у Telegram Mini Apps
+if (window.Telegram && Telegram.WebApp) {
+  Telegram.WebApp.ready(); // Ініціалізація Web App
+  Telegram.WebApp.expand(); // Розгорнути Web App на весь екран
 
-.container {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  width: 300px;
-}
+  // Отримуємо дані користувача
+  const user = Telegram.WebApp.initDataUnsafe.user;
+  const userId = user.id;
+  const userName = user.first_name;
+  const userUsername = user.username || 'немає юзернейму';
 
-h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
+  // Елементи для відображення даних
+  const myLocationElement = document.getElementById('myLocation');
+  const partnerLocationElement = document.getElementById('partnerLocation');
 
-.stats {
-  text-align: left;
-  margin-bottom: 20px;
-}
+  // Функція для отримання геолокації
+  function getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          // Отримуємо адресу за координатами (використовуємо OpenStreetMap Nominatim API)
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+            .then(response => response.json())
+            .then(data => {
+              const address = data.display_name || 'Адресу не вдалося визначити';
+              myLocationElement.textContent = address;
+              sendDataToBot('Отримано геолокацію', address);
+            });
+        },
+        (error) => {
+          console.error('Помилка отримання геолокації:', error);
+          myLocationElement.textContent = 'Геолокацію не вдалося визначити';
+        }
+      );
+    } else {
+      myLocationElement.textContent = 'Геолокація не підтримується';
+    }
+  }
 
-.stat {
-  margin-bottom: 10px;
-}
+  // Функція для відправки даних до Telegram бота
+  function sendDataToBot(action, address) {
+    const message = {
+      userId: userId,
+      userName: userName,
+      action: action,
+      address: address
+    };
+    Telegram.WebApp.sendData(JSON.stringify(message)); // Відправляємо дані
+  }
 
-.label {
-  font-weight: bold;
-  display: block;
-}
+  // Отримуємо геолокацію при завантаженні сторінки
+  getLocation();
 
-.value {
-  display: block;
-  margin-left: 10px;
-}
+  // Кнопка "Почати заново"
+  document.getElementById('restartButton').addEventListener('click', () => {
+    sendDataToBot('Натиснута кнопка "Почати заново"', myLocationElement.textContent);
+    alert('Все скинуто! Починаємо новий відлік.');
+  });
 
-.navigation {
-  display: flex;
-  justify-content: space-between;
-}
-
-.nav-button {
-  background: #FF6F61;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.nav-button:hover {
-  background: #FF3B2F;
+  // Кнопка "Не цікавить"
+  document.getElementById('notInterestedButton').addEventListener('click', () => {
+    sendDataToBot('Натиснута кнопка "Не цікавить"', myLocationElement.textContent);
+    alert('Дякуємо за відгук!');
+  });
 }
