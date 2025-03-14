@@ -1,42 +1,35 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Час разом і після розставання</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartTiktok</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Час разом і після розставання</h1>
-    <div class="stats">
-      <div class="stat">
-        <span class="label">Час разом:</span>
-        <span class="value" id="timeTogether">0 дн 0 год 0 хв 0 с</span>
-      </div>
-      <div class="stat">
-        <span class="label">Час після розставання:</span>
-        <span class="value" id="timeAfterBreakup">0 дн 0 год 0 хв 0 с</span>
-      </div>
-      <div class="stat">
-        <span class="label">Відстань між вами:</span>
-        <span class="value" id="distance">0 км</span>
-      </div>
-      <div class="stat">
-        <span class="label">Влад (ваше місце):</span>
-        <span class="value" id="myLocation">Завантаження...</span>
-      </div>
-      <div class="stat">
-        <span class="label">Дзвінка (її місце):</span>
-        <span class="value" id="partnerLocation">Завантаження...</span>
-      </div>
+    <div class="container">
+        <header>
+            <div class="profile">
+                <img src="avatar.png" alt="Аватар" class="avatar">
+                <span class="username">Ваш ник</span>
+                <span class="level">LVL 0</span>
+            </div>
+            <div class="hearts">❤️ 0</div>
+        </header>
+        <div class="love-meter">
+            <span class="love-score">0 / 5000 Love</span>
+            <div class="slider"></div>
+        </div>
+        <footer>
+            <nav>
+                <a href="#" class="nav-item">Главная</a>
+                <a href="#" class="nav-item">Задачи</a>
+                <a href="#" class="nav-item">Магазин</a>
+                <a href="#" class="nav-item">Рейтинг</a>
+                <a href="#" class="nav-item">Настройки</a>
+            </nav>
+        </footer>
     </div>
-    <div class="navigation">
-      <button class="nav-button" id="restartButton">Почати заново</button>
-      <button class="nav-button" id="notInterestedButton">Не цікавить</button>
-    </div>
-  </div>
-  <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
